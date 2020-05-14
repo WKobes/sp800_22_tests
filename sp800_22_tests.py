@@ -31,24 +31,10 @@ def read_bits_from_file(filename,bigendian):
     if filename == None:
         f = sys.stdin
     else:
-        f = open(filename, "rb")
-    while True:
-        bytes = f.read(16384)
-        if bytes:
-            for bytech in bytes:
-                if sys.version_info > (3,0):
-                    byte = bytech
-                else:
-                    byte = ord(bytech) 
-                for i in range(8):
-                    if bigendian:
-                        bit = (byte & 0x80) >> 7
-                        byte = byte << 1
-                    else:
-                        bit = (byte >> i) & 1
-                    bitlist.append(bit)    
-        else:
-            break
+        f = open(filename, "r")
+        bits = f.readline()
+        for bit in bits:
+            bitlist.append(int(bit))
     f.close()
     return bitlist
 
@@ -105,7 +91,7 @@ if args.list_tests:
         print(str(i+1).ljust(4)+": "+testname)
     exit()
 
-bits = read_bits_from_file(filename,bigendian)    
+bits = read_bits_from_file('../SyS2020/PRNGs-and-PUFs/random.bin',bigendian)
 gotresult=False
 if args.testname:
     if args.testname in testlist:    
